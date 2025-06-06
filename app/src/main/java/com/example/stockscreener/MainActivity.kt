@@ -1,20 +1,30 @@
 package com.example.stockscreener
 
-import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import android.os.Bundle
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.example.stockscreener.model.*
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+
+        val stocks = loadStocksFromAssets()
+        val recyclerView = findViewById<RecyclerView>(R.id.stockRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = StockAdapter(stocks)
     }
+
+
+    private fun loadStocksFromAssets(): List<Stock> {
+        val jsonString = assets.open("stocks.json").bufferedReader().use { it.readText() }
+        val stockResponse = Gson().fromJson(jsonString, StockResponse::class.java)
+        return stockResponse.stocks
+    }
+
 }
