@@ -9,7 +9,8 @@ data class Stock(
     val symbol: String,
     val name: String,
     val logo_url: String,
-    val stock_price: StockPrice
+    val stock_price: StockPrice,
+    var isFavorite: Boolean = false
 )
 
 data class StockPrice(
