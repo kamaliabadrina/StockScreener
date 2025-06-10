@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">StockScreener</string>
+    <string name="trending_stocks">Trending Stocks</string>
+    <string name="search_results">Search Results</string>
+    <string name="stock_singular">1 stock</string>
+    <string name="stock_plural">%d stocks</string>
+    <string name="favorites_with_count">Favorites (%d)</string>
+    <string name="favorites">Favorites</string>
+    <string name="all_favorites_cleared">All favorites cleared</string>
+    <string name="no_favorites_to_clear">No favorites to clear</string>
+    <string name="no_favorite_stocks">No favorite stocks yet.\nAdd some from the main screen!</string>
+    <string name="favorites_updated">Favorites updated</string>
 </resources>

@@ -7,6 +7,7 @@
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
+    app:cardBackgroundColor="@android:color/white"
     app:strokeWidth="0dp"
     android:clickable="true"
     android:focusable="true"
@@ -39,20 +40,18 @@
 
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Favorite Button -->
         <ImageButton
             android:id="@+id/btnFavorite"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_favorite_border"
+            android:contentDescription="Toggle Favorite"
             android:padding="4dp"
             android:scaleType="centerInside"
-            android:contentDescription="Toggle Favorite"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:src="@drawable/ic_favorite_border"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Stock Name -->
         <TextView
             android:id="@+id/tvName"
             android:layout_width="0dp"
@@ -96,7 +95,7 @@
             app:layout_constraintEnd_toStartOf="@id/btnFavorite"
             app:layout_constraintTop_toTopOf="@id/logoContainer">
 
-            <!-- Current Price -->
+            <!-- Current Price with Currency Symbol -->
             <TextView
                 android:id="@+id/tvPrice"
                 android:layout_width="wrap_content"
@@ -106,7 +105,9 @@
                 android:textStyle="bold"
                 android:textColor="@android:color/black"
                 android:fontFamily="sans-serif-medium"
-                android:gravity="end" />
+                android:gravity="end"
+                android:background="#FDFDFD"
+                android:padding="4dp" />
 
             <!-- Price Change Container -->
             <LinearLayout
@@ -134,7 +135,7 @@
 
         </LinearLayout>
 
-        <!-- Currency Label (optional) -->
+        <!-- Currency Label (hidden for now) -->
         <TextView
             android:id="@+id/tvCurrency"
             android:layout_width="wrap_content"
@@ -148,7 +149,7 @@
             android:background="#F5F5F5"
             android:paddingHorizontal="8dp"
             android:paddingVertical="2dp"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/logoContainer"
             app:layout_constraintTop_toBottomOf="@id/tvSymbol" />
 

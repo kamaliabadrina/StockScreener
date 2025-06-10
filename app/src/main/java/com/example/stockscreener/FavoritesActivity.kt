@@ -21,8 +21,6 @@ class FavoritesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorites)
-
-        // Set up toolbar/action bar
         supportActionBar?.apply {
             title = "Favorite Stocks"
             setDisplayHomeAsUpEnabled(true)
@@ -31,15 +29,9 @@ class FavoritesActivity : AppCompatActivity() {
         // Initialize views
         recyclerView = findViewById(R.id.favoritesRecyclerView)
         emptyStateText = findViewById(R.id.emptyStateText)
-
-        // Initialize favorites manager
         favoritesManager = FavoritesManager(this)
-
-        // Load all stocks and set up RecyclerView
         allStocks = loadStocksFromAssets()
         setupRecyclerView()
-
-        // Load and display favorites
         loadFavorites()
     }
 
@@ -51,22 +43,19 @@ class FavoritesActivity : AppCompatActivity() {
         val favoriteStocks = favoritesManager.getFavoriteStocks(allStocks)
 
         if (favoriteStocks.isEmpty()) {
-            // Show empty state
             recyclerView.visibility = RecyclerView.GONE
             emptyStateText.visibility = TextView.VISIBLE
-            emptyStateText.text = "No favorite stocks yet.\nAdd some from the main screen!"
+            emptyStateText.text = getString(R.string.no_favorite_stocks)
         } else {
-            // Show favorites
             recyclerView.visibility = RecyclerView.VISIBLE
             emptyStateText.visibility = TextView.GONE
-
+            val mutableFavoriteStocks = favoriteStocks.toMutableList()
             stockAdapter = StockAdapter(
-                stockList = favoriteStocks,
+                stockList = mutableFavoriteStocks,
                 favoritesManager = favoritesManager,
                 onFavoriteChanged = {
-                    // Refresh the favorites list when a favorite is removed
                     loadFavorites()
-                    Toast.makeText(this, "Favorites updated", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, getString(R.string.favorites_updated), Toast.LENGTH_SHORT).show()
                 }
             )
             recyclerView.adapter = stockAdapter
@@ -80,13 +69,11 @@ class FavoritesActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
         return true
     }
 
     override fun onResume() {
         super.onResume()
-        // Refresh favorites when returning to this activity
         loadFavorites()
     }
 }

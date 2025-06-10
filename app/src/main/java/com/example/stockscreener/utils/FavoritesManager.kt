@@ -1,5 +1,6 @@
 package com.example.stockscreener.utils
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import com.example.stockscreener.model.Stock
@@ -28,7 +29,7 @@ class FavoritesManager(context: Context) {
         return getFavoriteStockIds().contains(stockId)
     }
 
-    fun getFavoriteStockIds(): Set<Int> {
+    private fun getFavoriteStockIds(): Set<Int> {
         val favoritesString = sharedPreferences.getString(FAVORITES_KEY, "") ?: ""
         return if (favoritesString.isEmpty()) {
             emptySet()
@@ -37,6 +38,7 @@ class FavoritesManager(context: Context) {
         }
     }
 
+    @SuppressLint("UseKtx")
     private fun saveFavorites(favorites: Set<Int>) {
         val favoritesString = favorites.joinToString(",")
         sharedPreferences.edit()
@@ -48,56 +50,19 @@ class FavoritesManager(context: Context) {
         return getFavoriteStockIds().size
     }
 
-    // NEW METHODS FOR GETTING FAVORITE STOCKS
-
-    /**
-     * Get favorite stocks from a list of all stocks
-     * @param allStocks List of all available stocks
-     * @return List of favorite stocks only
-     */
     fun getFavoriteStocks(allStocks: List<Stock>): List<Stock> {
         val favoriteIds = getFavoriteStockIds()
         return allStocks.filter { stock -> favoriteIds.contains(stock.id) }
     }
 
-    /**
-     * Filter stocks to show only favorites
-     * @param allStocks List of all available stocks
-     * @return List of favorite stocks, or empty list if no favorites
-     */
-    fun filterFavoriteStocks(allStocks: List<Stock>): List<Stock> {
-        return getFavoriteStocks(allStocks)
-    }
-
-    /**
-     * Check if there are any favorites
-     * @return true if user has favorite stocks, false otherwise
-     */
     fun hasFavorites(): Boolean {
         return getFavoriteStockIds().isNotEmpty()
     }
 
-    /**
-     * Clear all favorites
-     */
+    @SuppressLint("UseKtx")
     fun clearAllFavorites() {
         sharedPreferences.edit()
             .remove(FAVORITES_KEY)
             .apply()
-    }
-
-    /**
-     * Toggle favorite status of a stock
-     * @param stockId ID of the stock to toggle
-     * @return true if stock is now favorited, false if unfavorited
-     */
-    fun toggleFavorite(stockId: Int): Boolean {
-        return if (isFavorite(stockId)) {
-            removeFromFavorites(stockId)
-            false
-        } else {
-            addToFavorites(stockId)
-            true
-        }
     }
 }
