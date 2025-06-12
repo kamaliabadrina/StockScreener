@@ -45,21 +45,16 @@ class StockAdapter(
         holder.nameText.text = stock.name
         holder.symbolText.text = stock.symbol
 
-        // Format price with currency symbol
         val price = stock.stock_price.current_price.amount
         val currency = stock.stock_price.current_price.currency
 
         val formattedPrice = formatCurrencyPrice(price, currency)
 
-        // Debug logging
         Log.d("StockAdapter", "Stock: ${stock.symbol}, Price: $price, Currency: $currency, Formatted: $formattedPrice")
 
         holder.priceText.text = formattedPrice
-
-        // Hide the separate currency display since it's now part of the price
         holder.currencyText.visibility = View.GONE
 
-        // Handle price changes
         val priceChange = stock.stock_price.price_change
         val percentageChange = stock.stock_price.percentage_change
 
@@ -67,7 +62,6 @@ class StockAdapter(
         val arrow = if (isPositive) "▲" else "▼"
         val sign = if (isPositive) "+" else ""
 
-        // Format price change text
         holder.priceChangeText.text = String.format(
             Locale.US,
             "%s %s%.2f (%.2f%%)",
@@ -77,10 +71,8 @@ class StockAdapter(
             percentageChange
         )
 
-        // Set price change colors and background
         holder.priceChangeText.setTextColor(ContextCompat.getColor(context, android.R.color.white))
 
-        // Set background color based on positive/negative change
         if (isPositive) {
             holder.priceChangeContainer.setBackgroundResource(R.drawable.price_change_background)
             holder.priceChangeContainer.isSelected = true
@@ -91,7 +83,6 @@ class StockAdapter(
             holder.priceChangeContainer.isActivated = true
         }
 
-        // Handle favorite button
         val isFavorite = favoritesManager.isFavorite(stock.id)
         updateFavoriteButton(holder.favoriteButton, isFavorite)
 
@@ -106,7 +97,6 @@ class StockAdapter(
             onFavoriteChanged?.invoke()
         }
 
-        // Load company logo
         Glide.with(context)
             .load(stock.logo_url)
             .into(holder.logoImage)
