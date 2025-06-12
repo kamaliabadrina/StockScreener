@@ -6,100 +6,15 @@
     android:layout_height="match_parent"
     android:background="#FAFAFA">
 
-    <!-- Modern Black Header -->
-    <com.google.android.material.card.MaterialCardView
+    <!-- Header -->
+    <include
         android:id="@+id/headerContainer"
+        layout="@layout/header_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:cardCornerRadius="0dp"
-        app:cardElevation="8dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="#000000"
-            android:paddingHorizontal="24dp"
-            android:paddingTop="56dp"
-            android:paddingBottom="32dp">
-
-            <!-- Header Top Row -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <!-- App Title -->
-                <TextView
-                    android:id="@+id/tvAppTitle"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/app_name"
-                    android:textSize="32sp"
-                    android:textStyle="bold"
-                    android:textColor="#FFFFFF"
-                    android:fontFamily="sans-serif-black"
-                    android:letterSpacing="-0.01" />
-
-                <!-- Favorites FAB -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/fabFavorites"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/ic_favorite_filled"
-                    android:contentDescription="View Favorites"
-                    app:fabSize="mini"
-                    app:backgroundTint="#FFFFFF"
-                    app:tint="#000000"
-                    app:elevation="4dp" />
-
-            </LinearLayout>
-
-            <!-- Market Status Section -->
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardBackgroundColor="#333333"
-                app:cardElevation="0dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="6dp">
-
-                    <View
-                        android:id="@+id/marketStatusDot"
-                        android:layout_width="6dp"
-                        android:layout_height="6dp"
-                        android:background="#4CAF50"
-                        android:layout_marginEnd="8dp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Market Open"
-                        android:textSize="12sp"
-                        android:textColor="#FFFFFF"
-                        android:fontFamily="sans-serif-medium"
-                        android:alpha="0.9" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
-
-    </com.google.android.material.card.MaterialCardView>
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Search Bar -->
     <com.google.android.material.card.MaterialCardView
@@ -136,7 +51,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:hint="Search stocks..."
+                android:hint="@string/search_stocks"
                 android:textSize="16sp"
                 android:textColor="#333333"
                 android:textColorHint="#999999"
@@ -168,7 +83,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Trending Stocks"
+            android:text="@string/trending_stocks"
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="#1A1A1A"
@@ -186,7 +101,7 @@
                 android:id="@+id/tvStockCount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="30 stocks"
+                android:text="@string/thirty_stocks"
                 android:textSize="12sp"
                 android:textColor="#666666"
                 android:fontFamily="sans-serif-medium"
