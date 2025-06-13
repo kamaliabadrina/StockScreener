@@ -4,7 +4,7 @@ A modern Android stock screening application built with Kotlin that allows users
 
 ## Features
 
--  **Real-time Stock Data**: Browse trending stocks with current prices and market changes
+-  **Stock Data**: Browse trending stocks with current prices and market changes
 -  **Search Functionality**: Search for stocks by symbol or company name
 -  **Favorites System**: Add/remove stocks to your personal watchlist
 -  **Price Indicators**: Visual indicators for price changes (green for gains, red for losses)
