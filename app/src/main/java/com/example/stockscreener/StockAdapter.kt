@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.stockscreener.model.Stock
@@ -87,14 +88,17 @@ class StockAdapter(
         updateFavoriteButton(holder.favoriteButton, isFavorite)
 
         holder.favoriteButton.setOnClickListener {
-            if (isFavorite) {
-                favoritesManager.removeFromFavorites(stock.id)
-                updateFavoriteButton(holder.favoriteButton, false)
-            } else {
-                favoritesManager.addToFavorites(stock.id)
-                updateFavoriteButton(holder.favoriteButton, true)
+            val currentPosition = holder.adapterPosition
+            if (currentPosition != RecyclerView.NO_POSITION) {
+                if (isFavorite) {
+                    favoritesManager.removeFromFavorites(stock.id)
+                } else {
+                    favoritesManager.addToFavorites(stock.id)
+                }
+                // Update only this specific item instead of the entire list
+                notifyItemChanged(currentPosition)
+                onFavoriteChanged?.invoke()
             }
-            onFavoriteChanged?.invoke()
         }
 
         Glide.with(context)
@@ -138,6 +142,111 @@ class StockAdapter(
         }
     }
 
+    // Efficient method to update the stock list using DiffUtil
+    fun updateStocks(newStocks: List<Stock>) {
+        val diffCallback = StockDiffCallback(stockList, newStocks)
+        val diffResult = DiffUtil.calculateDiff(diffCallback)
+
+        stockList.clear()
+        stockList.addAll(newStocks)
+        diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun updateItemAt(position: Int) {
+        if (position in 0 until stockList.size) {
+            notifyItemChanged(position)
+        }
+    }
+
+    fun notifyFavoritesCleared() {
+        notifyItemRangeChanged(0, stockList.size)
+    }
+
     override fun getItemCount(): Int = stockList.size
 
+    private class StockDiffCallback(
+        private val oldList: List<Stock>,
+        private val newList: List<Stock>
+    ) : DiffUtil.Callback() {
+
+        override fun getOldListSize(): Int = oldList.size
+
+        override fun getNewListSize(): Int = newList.size
+
+        override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            return oldList[oldItemPosition].id == newList[newItemPosition].id
+        }
+
+        override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+            val oldStock = oldList[oldItemPosition]
+            val newStock = newList[newItemPosition]
+
+            return oldStock.id == newStock.id &&
+                    oldStock.name == newStock.name &&
+                    oldStock.symbol == newStock.symbol &&
+                    oldStock.stock_price.current_price.amount == newStock.stock_price.current_price.amount &&
+                    oldStock.stock_price.current_price.currency == newStock.stock_price.current_price.currency &&
+                    oldStock.stock_price.price_change == newStock.stock_price.price_change &&
+                    oldStock.stock_price.percentage_change == newStock.stock_price.percentage_change &&
+                    oldStock.logo_url == newStock.logo_url
+        }
+
+        override fun getChangePayload(oldItemPosition: Int, newItemPosition: Int): Any? {
+            val oldStock = oldList[oldItemPosition]
+            val newStock = newList[newItemPosition]
+            val changes = mutableListOf<String>()
+
+            if (oldStock.stock_price.current_price.amount != newStock.stock_price.current_price.amount) {
+                changes.add("price")
+            }
+            if (oldStock.stock_price.price_change != newStock.stock_price.price_change) {
+                changes.add("change")
+            }
+            if (oldStock.stock_price.percentage_change != newStock.stock_price.percentage_change) {
+                changes.add("percentage")
+            }
+
+            return changes.ifEmpty { null }
+        }
+    }
+
+    override fun onBindViewHolder(holder: StockViewHolder, position: Int, payloads: MutableList<Any>) {
+        if (payloads.isEmpty()) {
+            super.onBindViewHolder(holder, position, payloads)
+        } else {
+            val stock = stockList[position]
+            val changes = payloads[0] as List<*>
+
+            if (changes.contains("price")) {
+                val price = stock.stock_price.current_price.amount
+                val currency = stock.stock_price.current_price.currency
+                holder.priceText.text = formatCurrencyPrice(price, currency)
+            }
+
+            if (changes.contains("change") || changes.contains("percentage")) {
+                val priceChange = stock.stock_price.price_change
+                val percentageChange = stock.stock_price.percentage_change
+                val isPositive = priceChange >= 0
+                val arrow = if (isPositive) "▲" else "▼"
+                val sign = if (isPositive) "+" else ""
+
+                holder.priceChangeText.text = String.format(
+                    Locale.US,
+                    "%s %s%.2f (%.2f%%)",
+                    arrow,
+                    sign,
+                    priceChange,
+                    percentageChange
+                )
+
+                if (isPositive) {
+                    holder.priceChangeContainer.isSelected = true
+                    holder.priceChangeContainer.isActivated = false
+                } else {
+                    holder.priceChangeContainer.isSelected = false
+                    holder.priceChangeContainer.isActivated = true
+                }
+            }
+        }
+    }
 }
