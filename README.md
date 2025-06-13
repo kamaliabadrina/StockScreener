@@ -1,6 +1,6 @@
 # Stock Screener Android App
 
-A modern Android stock screening application built with Kotlin that allows users to browse, search, and favorite stocks with real-time price information and market indicators.
+A modern Android stock screening application built with Kotlin that allows users to browse, search, and favorite stocks with price information and market indicators.
 
 ## Features
 
